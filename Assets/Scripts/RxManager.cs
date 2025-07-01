@@ -21,4 +21,23 @@ public static class RxManager
     public static Subject<float> playerOnGround = new Subject<float>();
     public static Subject<bool> playerFallInWatter = new Subject<bool>();
     public static Subject<bool> playerDie = new Subject<bool>();
+
+    public static Subject<int> updateLive = new Subject<int>();
+    public static Subject<int> updateHeal = new Subject<int>();
+
+    public static Subject<AudioClip> SetBGMusicInMap = new Subject<AudioClip>();
+    public static Subject<bool> SetBGMusicDefaultInMap = new Subject<bool>();
+
+    public static Subject<bool> UpdateAvatarInGamePlayPanel = new Subject<bool>();
+
+    public static Subject<bool> onClickPauseBtn = new Subject<bool>();
+
+    public static Subject<int> selectSkinId = new Subject<int>();
+
+    public static Subject<int> NewSkinPanel = new Subject<int>();
+
+    public static Subject<int> updateMoney = new Subject<int>();
+
+    public static Subject<bool> audioClick = new Subject<bool>();
+
 }

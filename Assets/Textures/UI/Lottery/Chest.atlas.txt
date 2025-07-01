@@ -1,0 +1,27 @@
+
+Chest.png
+size: 584,320
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+lottery/chest_bottom
+  rotate: true
+  xy: 432, 3
+  size: 315, 150
+  orig: 315, 150
+  offset: 0, 0
+  index: -1
+lottery/chest_glow
+  rotate: true
+  xy: 2, 6
+  size: 312, 234
+  orig: 312, 234
+  offset: 0, 0
+  index: -1
+lottery/chest_top
+  rotate: true
+  xy: 238, 2
+  size: 316, 192
+  orig: 316, 192
+  offset: 0, 0
+  index: -1

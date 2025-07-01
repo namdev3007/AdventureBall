@@ -10,6 +10,8 @@ public class GameplayManager : SingletonDontDestroy<GameplayManager>
 
     private MapManager currentMap;
     public bool inEvent = false;
+
+    public SkinData skinData;
     public int Map
     {
         get => PlayerPrefs.GetInt("MAP", 1);
@@ -78,6 +80,16 @@ public class GameplayManager : SingletonDontDestroy<GameplayManager>
         player.transform.position = currentMap.GetPlayerPosition();
         player.gameObject.SetActive(true);
     }
+
+    public void AddCoin(int value)
+    {
+        int current = PlayerPrefs.GetInt("MONEY", 0);
+        PlayerPrefs.SetInt("MONEY", current + value);
+        PlayerPrefs.Save();
+
+        RxManager.updateMoney.OnNext(current + value);
+    }
+
 }
 
 
