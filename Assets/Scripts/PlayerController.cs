@@ -1,4 +1,6 @@
+using DG.Tweening;
 using UnityEngine;
+using System.Collections;
 
 [System.Serializable]
 public class StatPlayer
@@ -33,6 +35,10 @@ public class PlayerController : MonoBehaviour
     private float timeJump = 0;
     private float lastVelocityGroundY = 0;
     private RaycastHit2D hit;
+
+
+    public GameObject hearthIconPlayer;
+    public GameObject efectSpawn;
 
     void Awake()
     {
@@ -117,6 +123,31 @@ public class PlayerController : MonoBehaviour
                 rb.AddForceAtPosition(new Vector2(forceX, 0), transform.position + Vector3.up * forceYPos);
             }
         }
+    }
+
+    public void ShowEfectPlayerSpawn(Vector3 pointSpawnPlayer)
+    {
+        hearthIconPlayer.SetActive(true);
+        hearthIconPlayer.transform.position = GameplayManager.Instance.ConverUIToGameplay(UIManager.Instance.gameplayUIPanel.currentTextLiveInGamePlay.position);
+
+        hearthIconPlayer.transform.DOScale(0.8f, 2f).SetEase(Ease.OutQuart);
+        hearthIconPlayer.transform.DOMove(GameplayManager.Instance.player.transform.position, 2f).SetEase(Ease.OutCubic).OnComplete(delegate
+        {
+            hearthIconPlayer.gameObject.SetActive(false);
+            GameplayManager.Instance.ActivePlayer();
+
+            if (efectSpawn)
+            {
+                efectSpawn.SetActive(true);
+                StartCoroutine(WaitAndInvisibleEfectSpawn());
+            }
+        });
+    }
+
+    public IEnumerator WaitAndInvisibleEfectSpawn()
+    {
+        yield return new WaitForSeconds(1);
+        efectSpawn.SetActive(false);
     }
 
     public void UpdateMovementRight() => moveInput = 1;

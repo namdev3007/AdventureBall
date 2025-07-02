@@ -7,6 +7,7 @@ public class Skin
 {
     public int skinID;
     public int levelUnlock;
+    public Sprite skinSprite; 
 }
 
 [System.Serializable]
@@ -33,6 +34,41 @@ public class SkinData : ScriptableObject
     public List<PremiumSkin> premiumSkin;
     public List<RescueSkin> rescueSkin;
     public List<CoinSkin> coinSkin;
+
+    [ContextMenu("RemoveSkin")]
+    void RemoveSkin()
+    {
+        for (int i = premiumSkin.Count - 1; i >= 0; i--)
+        {
+            var item = premiumSkin[i];
+
+            if (item.skinSprite == null)
+            {
+                Debug.LogWarning($"Premium Skin ID {item.skinID} has no sprite assigned. Removing.");
+                premiumSkin.RemoveAt(i);
+            }
+        }
+
+        for (int i = rescueSkin.Count - 1; i >= 0; i--)
+        {
+            var item = rescueSkin[i];
+            if (item.skinSprite == null)
+            {
+                Debug.LogWarning($"Rescue Skin ID {item.skinID} has no sprite assigned. Removing.");
+                rescueSkin.RemoveAt(i);
+            }
+        }
+
+        for (int i = coinSkin.Count - 1; i >= 0; i--)
+        {
+            var item = coinSkin[i];
+            if (item.skinSprite == null)
+            {
+                Debug.LogWarning($"Coin Skin ID {item.skinID} has no sprite assigned. Removing.");
+                coinSkin.RemoveAt(i);
+            }
+        }
+    }
 
 
     public Skin GetSkinUnlockByLevel(int level)

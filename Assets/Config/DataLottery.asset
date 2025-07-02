@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d516c5eab0bfa7f47bd08fd58e5bdfdf, type: 3}
+  m_Name: DataLottery
+  m_EditorClassIdentifier: 
+  listLottery:
+    listLottery:
+    - typeOfLottery: 0
+      typeOfSkin: 1
+      numberOfLottery: 1000
+      rate: 50
+      isBesPrize: 0
+    - typeOfLottery: 0
+      typeOfSkin: 1
+      numberOfLottery: 2000
+      rate: 30
+      isBesPrize: 0
+    - typeOfLottery: 0
+      typeOfSkin: 1
+      numberOfLottery: 3000
+      rate: 12
+      isBesPrize: 0
+    - typeOfLottery: 1
+      typeOfSkin: 0
+      numberOfLottery: 0
+      rate: 8
+      isBesPrize: 1
+  coinIfFullSkin: 3000

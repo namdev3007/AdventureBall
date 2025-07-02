@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1952abd64a1be79489bfd17c6d22a27f, type: 3}
+  m_Name: SkinData
+  m_EditorClassIdentifier: 
+  premiumSkin:
+  - skinID: 0
+    levelUnlock: 2
+    coin: 0
+    isFree: 1
+  rescueSkin:
+  - skinID: 1
+    levelUnlock: 3
+  coinSkin:
+  - skinID: 2
+    levelUnlock: 4

@@ -1,136 +1,154 @@
-using UnityEngine;
-using UniRx;
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
+using UniRx;
 
 public class MapManager : MonoBehaviour
 {
-    public int mapIndex;
-    public AudioClip mapBackgroundMusic;
     public StartPoint startPoint;
 
-    private List<CheckpointControl> checkpointControls = new List<CheckpointControl>();
-    private Dictionary<int, GameObject> loadedCheckpoints = new Dictionary<int, GameObject>();
+    private int mapNumber;
+
+    private List<CheckpointControl> listCheckPointControl;
+    private Dictionary<int, GameObject> dictCheckPoint;
+
+    public AudioClip audioBGMap;
+    public Vector2 scaleSkeleton;
 
     private void Start()
     {
-        RxManager.SaveCheckpoint.Subscribe(AddCheckpoint).AddTo(this);
-        RxManager.PreloadCheckpoint.Subscribe(PreloadCheckpoint).AddTo(this);
+        RxManager.saveCheckpoint.Subscribe(__checkPointControl => AddCheckPointControl(__checkPointControl)).AddTo(this);
+        RxManager.preloadCheckpoint.Subscribe(__checkPointControl => PreLoadNextCheckPoint(__checkPointControl)).AddTo(this);
 
         if (startPoint == null)
         {
             startPoint = GetComponentInChildren<StartPoint>();
         }
 
-        if (mapBackgroundMusic != null)
+        if (audioBGMap)
         {
-            RxManager.SetBGMusicMap.OnNext(mapBackgroundMusic);
+            RxManager.SetBGMusicInMap.OnNext(audioBGMap);
         }
         else
         {
-            RxManager.SetDefaultBGMusicMap.OnNext(true);
+            RxManager.SetBGMusicDefaultInMap.OnNext(true);
         }
 
-        LoadCurrentCheckpoint();
+        if (scaleSkeleton != null)
+        {
+            RxManager.setScaleAvatarBoss.OnNext(scaleSkeleton);
+        }
     }
 
-    public void setStartMap(int index)
+    public void AddCheckPointControl(CheckpointControl _checkPointComtrol)
     {
-        mapIndex = index;
-        checkpointControls.Clear();
-        loadedCheckpoints.Clear();
-        LoadCurrentCheckpoint();
+        if (!listCheckPointControl.Contains(_checkPointComtrol))
+        {
+            listCheckPointControl.Add(_checkPointComtrol);
+        }
     }
 
     public Vector3 GetPlayerPosition()
     {
-        return checkpointControls.Count == 0
-            ? startPoint.startPoint.position
-            : checkpointControls[checkpointControls.Count - 1].pointSpawn.position;
+        if (listCheckPointControl.Count == 0)
+        {
+            return startPoint.startPoint.position;
+        }
+        else
+        {
+            return listCheckPointControl[listCheckPointControl.Count - 1].pointSpawn.position;
+        }
+    }
+
+    public int GetCurrentCheckPoint()
+    {
+        return listCheckPointControl.Count;
+    }
+
+    public void setStartMap(int _map)
+    {
+
+        mapNumber = _map;
+        dictCheckPoint = new Dictionary<int, GameObject>();
+        listCheckPointControl = new List<CheckpointControl>();
+        LoadCurrentCheckPoint();
+
+    }
+
+    void LoadCurrentCheckPoint()
+    {
+        LoadCheckPointIndex(listCheckPointControl.Count);
+    }
+
+    string GetPathCheckPoint(int index)
+    {
+        Debug.Log("Map: " + mapNumber);
+        return string.Format("CheckPoint/Map {0}/Checkpoint{1}", mapNumber, index);
+    }
+
+    void LoadCheckPointIndex(int index)
+    {
+        if (dictCheckPoint.ContainsKey(index) == false)
+        {
+            UnityEngine.Object obj = Resources.Load(GetPathCheckPoint(index), typeof(GameObject));
+            InstanCheckPoint(index, obj);
+        }
+    }
+
+    void InstanCheckPoint(int index, UnityEngine.Object obj)
+    {
+        if (obj != null && !dictCheckPoint.ContainsKey(index))
+        {
+            GameObject objCheckPoint = (Instantiate(obj, transform) as GameObject);
+            dictCheckPoint.Add(index, objCheckPoint);
+        }
+    }
+
+    IEnumerator LoadAsyncCheckPointIndex(int index)
+    {
+        ResourceRequest request = Resources.LoadAsync(GetPathCheckPoint(index), typeof(GameObject));
+        while (!request.isDone)
+        {
+            yield return null;
+        }
+        InstanCheckPoint(index, request.asset);
+    }
+
+    public void PreLoadNextCheckPoint(CheckpointControl _checkPointComtrol)
+    {
+        int index = listCheckPointControl.Count + 1;
+        if (dictCheckPoint.ContainsKey(index) == false)
+        {
+            StartCoroutine(LoadAsyncCheckPointIndex(index));
+        }
     }
 
     public void reLoadCurrenCheckPoint()
     {
-        int currentIndex = checkpointControls.Count;
-        if (loadedCheckpoints.ContainsKey(currentIndex))
+        if (dictCheckPoint.ContainsKey(listCheckPointControl.Count))
         {
-            Destroy(loadedCheckpoints[currentIndex]);
-            loadedCheckpoints.Remove(currentIndex);
+            Destroy(dictCheckPoint[listCheckPointControl.Count]);
+            dictCheckPoint.Remove(listCheckPointControl.Count);
         }
 
-        LoadCurrentCheckpoint();
+        LoadCurrentCheckPoint();
     }
 
-    public void RestartMap()
+    public void ReStartMap()
     {
-        foreach (var cp in loadedCheckpoints.Values)
+        foreach (var checkPoint in dictCheckPoint)
         {
-            Destroy(cp);
+            Destroy(checkPoint.Value);
         }
+        dictCheckPoint.Clear();
 
-        loadedCheckpoints.Clear();
-
-        foreach (var cpCtrl in checkpointControls)
+        foreach (var _checkPointControl in listCheckPointControl)
         {
-            cpCtrl.ResetCheckPoint();
+            _checkPointControl.ResetCheckPoint();
         }
+        listCheckPointControl.Clear();
 
-        checkpointControls.Clear();
-
-        LoadCurrentCheckpoint();
-    }
-
-    private void AddCheckpoint(CheckpointControl checkpoint)
-    {
-        if (!checkpointControls.Contains(checkpoint))
-        {
-            checkpointControls.Add(checkpoint);
-        }
-    }
-
-    private void PreloadCheckpoint(CheckpointControl current)
-    {
-        int nextIndex = checkpointControls.Count + 1;
-        if (!loadedCheckpoints.ContainsKey(nextIndex))
-        {
-            StartCoroutine(LoadCheckpointAsync(nextIndex));
-        }
-    }
-
-    private string GetCheckpointPath(int index)
-    {
-        return GameplayManager.Instance.inEvent
-            ? $"CheckPointEvent/Map {mapIndex}/Checkpoint{index}"
-            : $"CheckPoint/Map {mapIndex}/Checkpoint{index}";
-    }
-
-    private void LoadCheckpointByIndex(int index)
-    {
-        if (!loadedCheckpoints.ContainsKey(index))
-        {
-            Object prefab = Resources.Load(GetCheckpointPath(index));
-            if (prefab != null)
-            {
-                GameObject instance = Instantiate(prefab, transform) as GameObject;
-                loadedCheckpoints[index] = instance;
-            }
-        }
-    }
-
-    private IEnumerator LoadCheckpointAsync(int index)
-    {
-        ResourceRequest request = Resources.LoadAsync(GetCheckpointPath(index));
-        yield return request;
-
-        if (request.asset != null && !loadedCheckpoints.ContainsKey(index))
-        {
-            GameObject obj = Instantiate(request.asset, transform) as GameObject;
-            loadedCheckpoints[index] = obj;
-        }
-    }
-
-    private void LoadCurrentCheckpoint()
-    {
-        LoadCheckpointByIndex(checkpointControls.Count);
+        LoadCurrentCheckPoint();
     }
 }
