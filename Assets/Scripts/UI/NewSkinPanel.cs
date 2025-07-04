@@ -15,6 +15,5 @@ public class NewSkinPanel : MonoBehaviour
 
     public void OnclickBackButton()
     {
-        UIManager.Instance.ActiveNewSkinPanel(false);
     }
 }

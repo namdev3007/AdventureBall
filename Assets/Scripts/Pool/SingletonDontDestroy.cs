@@ -1,5 +1,12 @@
-using UnityEngine;
+﻿using UnityEngine;
 
+/// <summary>
+/// Be aware this will not prevent a non singleton constructor
+///   such as `T myT = new T();`
+/// To prevent that, add `protected T () {}` to your singleton class.
+/// 
+/// As a note, this is made as MonoBehaviour because we need Coroutines.
+/// </summary>
 public abstract class SingletonDontDestroy<T> : MonoBehaviour where T : MonoBehaviour
 {
     private static T _instance;
@@ -22,9 +29,9 @@ public abstract class SingletonDontDestroy<T> : MonoBehaviour where T : MonoBeha
             {
                 if (_instance == null)
                 {
-                    _instance = FindFirstObjectByType<T>();
+                    _instance = (T)FindObjectOfType(typeof(T));
 
-                    if (FindObjectsByType<T>(FindObjectsSortMode.None).Length > 1)
+                    if (FindObjectsOfType(typeof(T)).Length > 1)
                     {
                         Debug.LogError("[Singleton] Something went really wrong " +
                             " - there should never be more than 1 singleton!" +
@@ -36,9 +43,18 @@ public abstract class SingletonDontDestroy<T> : MonoBehaviour where T : MonoBeha
                     {
                         GameObject singleton = new GameObject();
                         _instance = singleton.AddComponent<T>();
-                        singleton.name = "[singleton] " + typeof(T).ToString();
+                        singleton.name = "[singleton]" + typeof(T).ToString();
 
                         DontDestroyOnLoad(singleton);
+
+                        //Debug.Log("[Singleton] An instance of " + typeof(T) +
+                        //    " is needed in the scene, so '" + singleton +
+                        //    "' was created with DontDestroyOnLoad.");
+                    }
+                    else
+                    {
+                        //Debug.Log("[Singleton] Using instance already created: " +
+                        //    _instance.gameObject.name);
                     }
                 }
 
@@ -48,7 +64,15 @@ public abstract class SingletonDontDestroy<T> : MonoBehaviour where T : MonoBeha
     }
 
     private static bool applicationIsQuitting = false;
-
+    /// <summary>
+    /// When Unity quits, it destroys objects in a random order.
+    /// In principle, a Singleton is only destroyed when application quits.
+    /// If any script calls Instance after it have been destroyed, 
+    ///   it will create a buggy ghost object that will stay on the Editor scene
+    ///   even after stopping playing the Application. Really bad!
+    /// So, this was made to be sure we're not creating that buggy ghost object.
+    /// </summary>
+    /// 
 
     protected virtual void OnDestroy()
     {

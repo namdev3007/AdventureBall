@@ -31,7 +31,7 @@ MonoBehaviour:
       isBesPrize: 0
     - typeOfLottery: 1
       typeOfSkin: 0
-      numberOfLottery: 0
+      numberOfLottery: 4
       rate: 8
       isBesPrize: 1
   coinIfFullSkin: 3000

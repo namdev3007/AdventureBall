@@ -16,9 +16,11 @@ public class DataSpin : ScriptableObject
 
     public DataSpin Clone()
     {
-        DataSpin dataSpin = new DataSpin();
+        DataSpin dataSpin = ScriptableObject.CreateInstance<DataSpin>();
+
         dataSpin.listRewardDaily = JsonUtility.FromJson<ReWardSpinDaily>(JsonUtility.ToJson(this.listRewardDaily));
         dataSpin.numberCoinIfFullSkin = this.numberCoinIfFullSkin;
+
         return dataSpin;
     }
 }

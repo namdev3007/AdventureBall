@@ -222,6 +222,7 @@ GameObject:
   - component: {fileID: 2571246858005281227}
   - component: {fileID: 2571246858005281226}
   - component: {fileID: 3298428618316377966}
+  - component: {fileID: 8752996401765712061}
   m_Layer: 0
   m_Name: CoinBtn
   m_TagString: Untagged
@@ -320,6 +321,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e53fb0e2965560f468e0dd9c60b75d59, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &8752996401765712061
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2571246858005281236}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26cf24c9fc5753a4fa7a9c9ad1c3c6c9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  text: {fileID: 8437258345152280406}
 --- !u!1 &2864037863628435106
 GameObject:
   m_ObjectHideFlags: 0

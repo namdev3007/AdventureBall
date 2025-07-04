@@ -161,6 +161,7 @@ GameObject:
   - component: {fileID: 536817477767594613}
   - component: {fileID: 536817477767594612}
   - component: {fileID: 3070386771443069231}
+  - component: {fileID: 7677875626989254212}
   m_Layer: 0
   m_Name: Live Btn
   m_TagString: Untagged
@@ -247,6 +248,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e53fb0e2965560f468e0dd9c60b75d59, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &7677875626989254212
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 536817477767594602}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4834230b5635af4aa198e9bca1edd20, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  text: {fileID: 5893775954399005928}
 --- !u!1 &536817477969462235
 GameObject:
   m_ObjectHideFlags: 0

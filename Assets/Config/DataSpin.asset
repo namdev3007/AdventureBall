@@ -19,9 +19,9 @@ MonoBehaviour:
       number: 2000
       rate: 20
       sizeOfIcon: 0
-    - rewardType: 2
-      skinType: 1
-      number: 1
+    - rewardType: 1
+      skinType: 0
+      number: 3
       rate: 5
       sizeOfIcon: 2
     - rewardType: 1
@@ -29,12 +29,12 @@ MonoBehaviour:
       number: 2
       rate: 20
       sizeOfIcon: 2
-    - rewardType: 2
+    - rewardType: 0
       skinType: 0
-      number: 1
+      number: 500
       rate: 10
       sizeOfIcon: 1
-    - rewardType: 0
+    - rewardType: 1
       skinType: 0
       number: 1
       rate: 10
@@ -46,15 +46,15 @@ MonoBehaviour:
       sizeOfIcon: 0
     - rewardType: 0
       skinType: 0
-      number: 1
+      number: 2500
       rate: 10
-      sizeOfIcon: 2
+      sizeOfIcon: 1
     - rewardType: 0
       skinType: 0
       number: 4000
       rate: 10
       sizeOfIcon: 1
-    - rewardType: 0
+    - rewardType: 1
       skinType: 0
       number: 3
       rate: 10

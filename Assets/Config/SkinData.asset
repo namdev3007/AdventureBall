@@ -13,13 +13,41 @@ MonoBehaviour:
   m_Name: SkinData
   m_EditorClassIdentifier: 
   premiumSkin:
-  - skinID: 0
-    levelUnlock: 2
+  - skinID: 4
+    levelUnlock: 48
+    skinSprite: {fileID: 3443468742828491540, guid: afac333c934f7f94d956f7e9cb5d94ad, type: 3}
     coin: 0
-    isFree: 1
+    isFree: 0
+  - skinID: 5
+    levelUnlock: 68
+    skinSprite: {fileID: 3443468742828491540, guid: 750345626e86be94bb8325279f049208, type: 3}
+    coin: 0
+    isFree: 0
+  - skinID: 6
+    levelUnlock: 78
+    skinSprite: {fileID: -3505136538536470210, guid: e6a727e7c18ee2244a7c5b88ac95a5cd, type: 3}
+    coin: 0
+    isFree: 0
   rescueSkin:
-  - skinID: 1
-    levelUnlock: 3
+  - skinID: 7
+    levelUnlock: 44
+    skinSprite: {fileID: -2532688410540315229, guid: 34fe3e576365a904eb54317af761c421, type: 3}
+  - skinID: 8
+    levelUnlock: 87
+    skinSprite: {fileID: -8993903765459102428, guid: c1dde3291d771b748bcc9ac375a59782, type: 3}
+  - skinID: 9
+    levelUnlock: 87
+    skinSprite: {fileID: 7628599932666848066, guid: d3fcbede06f3ca9459e0cae957baa917, type: 3}
   coinSkin:
+  - skinID: 0
+    levelUnlock: 0
+    skinSprite: {fileID: -2932246539594791792, guid: cc47ef9aab070f047890bd5f1ad0c356, type: 3}
+  - skinID: 1
+    levelUnlock: 78
+    skinSprite: {fileID: 6020414724442617356, guid: f6e53729feeccd848ac289ae49efc6a7, type: 3}
   - skinID: 2
-    levelUnlock: 4
+    levelUnlock: 22
+    skinSprite: {fileID: 852367345689295757, guid: 175af528b58377c47a1a6d0330c426c7, type: 3}
+  - skinID: 3
+    levelUnlock: 23
+    skinSprite: {fileID: -1306257573432019270, guid: 8a8428eaab75c1b4b8aa597b8d5f9e97, type: 3}

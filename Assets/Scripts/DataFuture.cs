@@ -1,19 +1,15 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.Rendering.Universal;
 
 public class DataFuture : MonoBehaviour
 {
-    private const string KEYDATA = "SpinRaward";
-
     private UnityAction eventFuture;
 
     public WheelOfFuture wheelOfFuture;
-
     public DataSpin dataSpin;
     private DataSpin _dataSpinCurrent;
     private DataSpin dataSpinCurrent
@@ -30,23 +26,18 @@ public class DataFuture : MonoBehaviour
 
     public Transform parrentDataChild;
     private DataChild[] listDataChild;
-
     private float totalRate;
-
     int randomIndex = 0;
-
     public PopupReward popupReward;
-
     public SpinPanel spinPanel;
+
     private void Start()
     {
-        dicNumberCoin = new Dictionary<int, int>();
-        dicNumberHearth = new Dictionary<int, int>();
-
         listDataChild = parrentDataChild.GetComponentsInChildren<DataChild>();
-        CreateReWard();
 
+        UpdateView();
     }
+
     public void ActionRotate()
     {
         totalRate = 0;
@@ -58,7 +49,6 @@ public class DataFuture : MonoBehaviour
         float randomRate = Random.Range(0, totalRate);
         float currentRate = 0;
 
-
         for (int i = 0; i < dataSpinCurrent.listRewardDaily.listRewardData.Length; i++)
         {
             currentRate += dataSpinCurrent.listRewardDaily.listRewardData[i].rate;
@@ -69,25 +59,28 @@ public class DataFuture : MonoBehaviour
             }
         }
 
+        RewardData winningReward = dataSpinCurrent.listRewardDaily.listRewardData[randomIndex];
+        Debug.Log($"<color=green>QUYẾT ĐỊNH PHẦN THƯỞNG: Vị trí {randomIndex}, Loại: {winningReward.rewardType}, Giá trị: {winningReward.number}</color>");
+
         eventFuture = ClaimReward;
         wheelOfFuture.RotateCallBack(randomIndex, eventFuture);
     }
 
     void ClaimReward()
     {
+        RewardData claimedReward = dataSpinCurrent.listRewardDaily.listRewardData[randomIndex];
+        Debug.Log($"<color=blue>TRAO PHẦN THƯỞNG: Vị trí {randomIndex}, Loại: {claimedReward.rewardType}, Giá trị: {claimedReward.number}</color>");
+
         ClaimSkin();
         spinPanel.SpinDone();
 
-        StartCoroutine(WaitAndRefreshReWard());
+        // Không cần làm mới lại vòng quay nữa
+        // StartCoroutine(WaitAndRefreshReWard()); 
+
         popupReward.ActivePoup(dataSpinCurrent.listRewardDaily.listRewardData[randomIndex]);
     }
 
-    IEnumerator WaitAndRefreshReWard()
-    {
-        yield return new WaitForSeconds(0.5f);
-        CreateNewReward();
-        UpdateView();
-    }
+    // Đã xóa Coroutine WaitAndRefreshReWard()
 
     public void ClaimSkin()
     {
@@ -107,187 +100,6 @@ public class DataFuture : MonoBehaviour
         spinPanel.RefreshText();
     }
 
-    void CreateReWard()
-    {
-        if (PlayerPrefs.HasKey(KEYDATA))
-        {
-            dataSpinCurrent.listRewardDaily = JsonUtility.FromJson<ReWardSpinDaily>(PlayerPrefs.GetString(KEYDATA));
-        }
-        else
-        {
-            CreateNewReward();
-        }
-        UpdateView();
-    }
-
-    private Dictionary<int, int> dicNumberCoin;
-    private Dictionary<int, int> dicNumberHearth;
-    void CreateNewReward()
-    {
-        dicNumberCoin.Clear();
-        dicNumberHearth.Clear();
-        List<int> listPremiumSkin = new List<int>();
-        foreach (var item in GameplayManager.Instance.skinData.premiumSkin)
-        {
-            if (!ShopManager.Instance.IsOwnSkin(item.skinID))
-            {
-                listPremiumSkin.Add(item.skinID);
-            }
-        }
-        List<int> listCoinSkin = new List<int>();
-        foreach (var item in GameplayManager.Instance.skinData.coinSkin)
-        {
-            if (!ShopManager.Instance.IsOwnSkin(item.skinID))
-            {
-                listCoinSkin.Add(item.skinID);
-            }
-        }
-        List<int> listRescuaSkin = new List<int>();
-        foreach (var item in GameplayManager.Instance.skinData.rescueSkin)
-        {
-            if (!ShopManager.Instance.IsOwnSkin(item.skinID))
-            {
-                listRescuaSkin.Add(item.skinID);
-            }
-        }
-        for (int i = 0; i < listDataChild.Length; i++)
-        {
-            if (dataSpinCurrent.listRewardDaily.listRewardData[i].rewardType == RewardType.Skin)
-            {
-                listDataChild[i].text.text = "SKIN";
-
-                if (dataSpinCurrent.listRewardDaily.listRewardData[i].skinType == SkinType.PremiumSkin)
-                {
-
-                    if (listPremiumSkin.Count > 0)
-                    {
-                        int index = Random.Range(0, listPremiumSkin.Count);
-                        dataSpinCurrent.listRewardDaily.listRewardData[i].number = listPremiumSkin[index];
-                        listPremiumSkin.RemoveAt(index);
-                    }
-                    else if (listCoinSkin.Count > 0)
-                    {
-                        int index = Random.Range(0, listCoinSkin.Count);
-                        dataSpinCurrent.listRewardDaily.listRewardData[i].number = listCoinSkin[index];
-                        listCoinSkin.RemoveAt(index);
-                    }
-                    else
-                    {
-                        dataSpinCurrent.listRewardDaily.listRewardData[i].rewardType = RewardType.Coin;
-                        dataSpinCurrent.listRewardDaily.listRewardData[i].number = dataSpinCurrent.numberCoinIfFullSkin;
-                    }
-
-                }
-                else if (dataSpinCurrent.listRewardDaily.listRewardData[i].skinType == SkinType.CoinSkin)
-                {
-                    if (listCoinSkin.Count > 0)
-                    {
-                        int index = Random.Range(0, listCoinSkin.Count);
-
-                        dataSpinCurrent.listRewardDaily.listRewardData[i].number = listCoinSkin[index];
-                        listCoinSkin.RemoveAt(index);
-                    }
-                    else
-                    {
-                        dataSpinCurrent.listRewardDaily.listRewardData[i].rewardType = RewardType.Coin;
-                        dataSpinCurrent.listRewardDaily.listRewardData[i].number = dataSpinCurrent.numberCoinIfFullSkin;
-                    }
-                }
-                else if (dataSpinCurrent.listRewardDaily.listRewardData[i].skinType == SkinType.RescuaSkin)
-                {
-                    if (listRescuaSkin.Count > 0)
-                    {
-                        int index = Random.Range(0, listRescuaSkin.Count);
-
-                        dataSpinCurrent.listRewardDaily.listRewardData[i].number = listRescuaSkin[index];
-                        listRescuaSkin.RemoveAt(index);
-                    }
-                    else
-                    {
-                        dataSpinCurrent.listRewardDaily.listRewardData[i].rewardType = RewardType.Coin;
-                        dataSpinCurrent.listRewardDaily.listRewardData[i].number = dataSpinCurrent.numberCoinIfFullSkin;
-                    }
-                }
-            }
-            if (dataSpinCurrent.listRewardDaily.listRewardData[i].rewardType == RewardType.Coin)
-            {
-                dicNumberCoin.Add(i, dataSpinCurrent.listRewardDaily.listRewardData[i].number);
-            }
-            else if (dataSpinCurrent.listRewardDaily.listRewardData[i].rewardType == RewardType.Heart)
-            {
-                dicNumberHearth.Add(i, dataSpinCurrent.listRewardDaily.listRewardData[i].number);
-            }
-        }
-
-        int numberCoinSmall = dicNumberCoin[dicNumberCoin.Keys.ElementAt(1)];
-        int numberCoinBig = dicNumberCoin[dicNumberCoin.Keys.ElementAt(1)];
-
-        int numberHearthSmall = dicNumberHearth[dicNumberHearth.Keys.ElementAt(1)];
-        int numberHearthBig = dicNumberHearth[dicNumberHearth.Keys.ElementAt(1)];
-
-        for (int i = 0; i < dicNumberCoin.Count; i++)
-        {
-            if (numberCoinSmall > dicNumberCoin[dicNumberCoin.Keys.ElementAt(i)])
-            {
-                numberCoinSmall = dicNumberCoin[dicNumberCoin.Keys.ElementAt(i)];
-            }
-
-            if (numberCoinBig < dicNumberCoin[dicNumberCoin.Keys.ElementAt(i)])
-            {
-                numberCoinBig = dicNumberCoin[dicNumberCoin.Keys.ElementAt(i)];
-            }
-        }
-
-        for (int i = 0; i < dicNumberHearth.Count; i++)
-        {
-            if (numberHearthSmall > dicNumberHearth[dicNumberHearth.Keys.ElementAt(i)])
-            {
-                numberHearthSmall = dicNumberHearth[dicNumberHearth.Keys.ElementAt(i)];
-            }
-
-            if (numberHearthBig < dicNumberHearth[dicNumberHearth.Keys.ElementAt(i)])
-            {
-
-                numberHearthBig = dicNumberHearth[dicNumberHearth.Keys.ElementAt(i)];
-            }
-        }
-
-        for (int i = 0; i < listDataChild.Length; i++)
-        {
-            if (dataSpinCurrent.listRewardDaily.listRewardData[i].rewardType == RewardType.Coin)
-            {
-                if (dataSpinCurrent.listRewardDaily.listRewardData[i].number == numberCoinSmall)
-                {
-                    dataSpinCurrent.listRewardDaily.listRewardData[i].sizeOfIcon = SizeOfIcon.Small;
-                }
-                else if (dataSpinCurrent.listRewardDaily.listRewardData[i].number == numberCoinBig)
-                {
-                    dataSpinCurrent.listRewardDaily.listRewardData[i].sizeOfIcon = SizeOfIcon.Big;
-                }
-                else
-                {
-                    dataSpinCurrent.listRewardDaily.listRewardData[i].sizeOfIcon = SizeOfIcon.Medium;
-                }
-            }
-            else if (dataSpinCurrent.listRewardDaily.listRewardData[i].rewardType == RewardType.Heart)
-            {
-                if (dataSpinCurrent.listRewardDaily.listRewardData[i].number == numberHearthSmall)
-                {
-                    dataSpinCurrent.listRewardDaily.listRewardData[i].sizeOfIcon = SizeOfIcon.Small;
-                }
-                else if (dataSpinCurrent.listRewardDaily.listRewardData[i].number == numberHearthBig)
-                {
-                    dataSpinCurrent.listRewardDaily.listRewardData[i].sizeOfIcon = SizeOfIcon.Big;
-                }
-                else
-                {
-                    dataSpinCurrent.listRewardDaily.listRewardData[i].sizeOfIcon = SizeOfIcon.Medium;
-                }
-            }
-        }
-
-        PlayerPrefs.SetString(KEYDATA, JsonUtility.ToJson(dataSpinCurrent.listRewardDaily));
-    }
 
     void UpdateView()
     {

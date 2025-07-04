@@ -13,12 +13,7 @@ public class SpinPanel : MonoBehaviour
     public TextMeshProUGUI textHeart;
     public Button SpinBtton;
 
-    public TextMeshProUGUI textTime;
     public TextMeshProUGUI textSpin;
-
-    // ?ã xóa: public bool freeSpin;
-    // ?ã xóa: public Image adsImage;
-    // ?ã xóa: private const string LASTTIMESPINFREE = "LASTTIMESPINFREE";
 
     public GameObject panel;
     public AudioClip audioSpine;
@@ -27,7 +22,6 @@ public class SpinPanel : MonoBehaviour
     private void OnEnable()
     {
         RefreshText();
-        textTime.enabled = false;
         textSpin.text = "Spin";
     }
 

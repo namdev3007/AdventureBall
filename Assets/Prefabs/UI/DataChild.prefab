@@ -56,7 +56,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f515ad2d5d5634544b07b153d49f4797, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  iconskin: {fileID: 5164762095651765406}
+  skinImage: {fileID: 3513876110710339868}
   iconRewardCoin: {fileID: 5164762095651765406}
   iconRewardCoin1: {fileID: 1412169693068871109}
   iconRewardCoin2: {fileID: 6849685300410598707}

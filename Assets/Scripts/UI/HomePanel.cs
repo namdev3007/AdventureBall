@@ -26,7 +26,6 @@ public class HomePanel : MonoBehaviour
     public TextMeshProUGUI liveText;
     public TextMeshProUGUI levelText;
     public GameObject effectVictory;
-    public GameObject dailyRewardPanel;
     public GameObject panelTrue;
     public GameObject panelFalse;
 
@@ -286,32 +285,6 @@ public class HomePanel : MonoBehaviour
 
         UpdateStateCurrentSkin();
 
-        // Đã xóa khối logic kiểm tra và hiển thị panel Rate tại đây.
-
-        if (GameplayManager.LEVEL_SHOW_LOTTERY.Contains($",{GameplayManager.Instance.Map - 1},"))
-            UIManager.Instance.ShowLotteryPanel();
-
-        HandleDailyReward();
-    }
-
-    void HandleDailyReward()
-    {
-        if (GameplayManager.Instance.Map <= GameplayManager.LEVEL_DAILY_REWARD) return;
-
-        if (PlayerPrefs.HasKey(LASTTIMECLAIMDAILYREWARD))
-        {
-            DateTime lastClaim = DateTime.FromBinary(long.Parse(PlayerPrefs.GetString(LASTTIMECLAIMDAILYREWARD)));
-            if (lastClaim.AddHours(24) <= DateTime.Now)
-            {
-                dailyRewardPanel.SetActive(true);
-                PlayerPrefs.SetString(LASTTIMECLAIMDAILYREWARD, DateTime.Now.ToBinary().ToString());
-            }
-        }
-        else
-        {
-            dailyRewardPanel.SetActive(true);
-            PlayerPrefs.SetString(LASTTIMECLAIMDAILYREWARD, DateTime.Now.ToBinary().ToString());
-        }
     }
 
     private IEnumerator WaitShowTapToPlay(float waitTime)
@@ -329,7 +302,6 @@ public class HomePanel : MonoBehaviour
     }
 
     public void OnclickSpinButton() => UIManager.Instance.ActiveSpinPanel(true);
-    public void OnClickGiftButton() => UIManager.Instance.ActiveGiftPanel(true);
 
     void OnClickBtnSkipLevel()
     {

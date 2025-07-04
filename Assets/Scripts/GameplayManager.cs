@@ -67,7 +67,6 @@ public class GameplayManager : SingletonDontDestroy<GameplayManager>
     public float timePlayerDieEfect = 3;
     public SkinData skinData;
 
-    public AudioClip audioBossBg;
     public AudioClip audioBGNormal;
 
     private bool bugShowHome;
@@ -98,7 +97,6 @@ public class GameplayManager : SingletonDontDestroy<GameplayManager>
     }
 
     public GameObject backGround1;
-    public GameObject backGround2;
 
     private int heal = 3;
     public int Heal { get => heal; }
@@ -169,12 +167,10 @@ public class GameplayManager : SingletonDontDestroy<GameplayManager>
         if (IsBackGround1())
         {
             backGround1.SetActive(true);
-            backGround2.SetActive(false);
         }
         else
         {
             backGround1.SetActive(false);
-            backGround2.SetActive(true);
         }
     }
 
@@ -245,7 +241,6 @@ public class GameplayManager : SingletonDontDestroy<GameplayManager>
 
         if (Map == 15)
         {
-            RxManager.SetBGMusicInMap.OnNext(audioBossBg);
         }
         else
         {

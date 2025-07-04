@@ -38,7 +38,6 @@ public class PlayerController : MonoBehaviour
 
 
     public GameObject hearthIconPlayer;
-    public GameObject efectSpawn;
 
     void Awake()
     {
@@ -135,20 +134,9 @@ public class PlayerController : MonoBehaviour
         {
             hearthIconPlayer.gameObject.SetActive(false);
             GameplayManager.Instance.ActivePlayer();
-
-            if (efectSpawn)
-            {
-                efectSpawn.SetActive(true);
-                StartCoroutine(WaitAndInvisibleEfectSpawn());
-            }
         });
     }
 
-    public IEnumerator WaitAndInvisibleEfectSpawn()
-    {
-        yield return new WaitForSeconds(1);
-        efectSpawn.SetActive(false);
-    }
 
     public void UpdateMovementRight() => moveInput = 1;
     public void UpdateMovementLeft() => moveInput = -1;

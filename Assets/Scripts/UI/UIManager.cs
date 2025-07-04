@@ -11,15 +11,7 @@ public class UIManager : SingletonDontDestroy<UIManager>
     public PausePanel pausePanel;
     public ShopPanel shopPanel;
     public RevivePanel revivePanel;
-    public GetSkinPanel getSkinPanel;
-    public NotiVideoPanel notiVideoPanel;
     public GameObject SpinPanel;
-    public GameObject GiftPanel;
-    public GameObject newSkinPanel;
-    public LotteryPanel lotteryPanel;
-    public LegacyUpdatePanel legacyUpdatePanel;
-    public ForceUpdatePanel forceUpdatePanel;
-    public SpecialOfferPanel specialOfferPanel;
 
     public RectTransform rectCanvas;
     void Start()
@@ -31,14 +23,8 @@ public class UIManager : SingletonDontDestroy<UIManager>
         RxManager.showRevivePanel.Subscribe(_ => showPanelRevive());
         RxManager.onClickPauseBtn.Subscribe(_ => PauseGame());
         RxManager.openShop.Subscribe(_ => ShowShopPanel());
-        RxManager.NewSkinPanel.Subscribe(_idSkin => ActiveNewSkinPanel(true, _idSkin));
-        // ?ã xóa: Dòng ??ng ký s? ki?n LoseLevelEvent
     }
 
-    public void ShowLotteryPanel()
-    {
-        lotteryPanel.gameObject.SetActive(true);
-    }
     void ShowShopPanel()
     {
         shopPanel.gameObject.SetActive(true);
@@ -49,7 +35,6 @@ public class UIManager : SingletonDontDestroy<UIManager>
     {
         shopPanel.gameObject.SetActive(false);
         homePanel.gameObject.SetActive(true);
-        // homePanel.BackToHome(); // Dòng này b? l?i vì HomePanel không có ph??ng th?c BackToHome, có th? b?n mu?n g?i ShowHome()
         homePanel.ShowHome();
     }
 
@@ -62,33 +47,16 @@ public class UIManager : SingletonDontDestroy<UIManager>
         revivePanel.gameObject.SetActive(true);
     }
 
-    public void ActiveGetSkinPanel(Skin skin = null)
-    {
-        gameplayUIPanel.gameObject.SetActive(false);
 
-        if (skin != null)
-        {
-            getSkinPanel.SetUnlockSkin(skin);
-        }
-        getSkinPanel.gameObject.SetActive(true);
-        AudioManager.Instance.ActiveAudioHome(true);
-    }
 
     public void ActiveSpinPanel(bool _bool)
     {
         homePanel.gameObject.SetActive(!_bool);
         SpinPanel.SetActive(_bool);
     }
-    public void ActiveGiftPanel(bool _bool)
-    {
-        homePanel.gameObject.SetActive(!_bool);
-        GiftPanel.SetActive(_bool);
-    }
 
-    public void ActiveNewSkinPanel(bool _bool, int _idSkin = 0)
-    {
-        newSkinPanel.SetActive(_bool);
-    }
+
+ 
     void ShowHomePanel()
     {
         homePanel.gameObject.SetActive(true);
@@ -126,13 +94,5 @@ public class UIManager : SingletonDontDestroy<UIManager>
         AudioManager.Instance.ActiveAudioHome(true);
         homePanel.gameObject.SetActive(true);
         homePanel.ShowLose();
-    }
-
-    public void OnClickSpecialOffer()
-    {
-        if (GameplayManager.IAP)
-        {
-            specialOfferPanel.gameObject.SetActive(true);
-        }
     }
 }
