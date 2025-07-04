@@ -1,0 +1,1 @@
+Super Ball Adventure là một trò chơi platformer 2D vui nhộn, nơi người chơi sẽ điều khiển một quả bóng dũng cảm vượt qua những thử thách và chướng ngại vật đầy hấp dẫn trong một thế giới phiêu lưu đầy màu sắc. Với lối chơi đơn giản nhưng lôi cuốn, trò chơi mang đến những pha nhảy, lăn và vượt địa hình đầy kịch tính.
